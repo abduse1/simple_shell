@@ -71,5 +71,3 @@ int main(int ac, char **av)
 		return (255);
 	return (datash.status);
 }
-© 2022 GitHub, Inc.
-Terms

@@ -29,6 +29,3 @@ int exit_shell(data_shell *datash)
 	}
 	return (0);
 }
-© 2022 GitHub, Inc.
-Terms
-Priv
