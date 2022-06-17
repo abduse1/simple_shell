@@ -1,65 +1,68 @@
 #include "main.h"
+
 /**
- * put_line - puts the line in the buffer from
- * _getline
- * @lineptr: where string is stored
- * @buf: string gotten from getline
- * @n: initial size of buf
- * @j: confirmed size of buf
+ * bring_line - assigns the line var for get_line
+ * @lineptr: Buffer that store the input str
+ * @buffer: str that is been called to line
+ * @n: size of line
+ * @j: size of buffer
  */
-void put_line(char **lineptr, size_t *n, char *buf, size_t j)
+void bring_line(char **lineptr, size_t *n, char *buffer, size_t j)
 {
+
 	if (*lineptr == NULL)
 	{
-		if (j > BUFFER)
+		if  (j > BUFSIZE)
 			*n = j;
+
 		else
-			*n = BUFFER;
-		*lineptr = buf;
+			*n = BUFSIZE;
+		*lineptr = buffer;
 	}
 	else if (*n < j)
 	{
-		if (j > BUFFER)
+		if (j > BUFSIZE)
 			*n = j;
 		else
-			*n = BUFFER;
-		*lineptr = buf;
+			*n = BUFSIZE;
+		*lineptr = buffer;
 	}
 	else
 	{
-		_strcpy(*lineptr, buf);
-		free(buf);
+		_strcpy(*lineptr, buffer);
+		free(buffer);
 	}
 }
 /**
- * _getline - gets a line from stdin
- * @lineptr: where the line is stored
- * @n: size of bytes
- * @stream: where it reads from
- * Return: no. of characters read or -1 on failure
+ * get_line - Read inpt from stream
+ * @lineptr: buffer that stores the input
+ * @n: size of lineptr
+ * @stream: stream to read from
+ * Return: The number of bytes
  */
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
+ssize_t get_line(char **lineptr, size_t *n, FILE *stream)
 {
 	int i;
 	static ssize_t input;
 	ssize_t retval;
-	char *buf;
-	char store = 's';
+	char *buffer;
+	char t = 'z';
 
 	if (input == 0)
 		fflush(stream);
 	else
 		return (-1);
 	input = 0;
-	buf = malloc(sizeof(char) * BUFFER);
-	if (buf == NULL)
+
+	buffer = malloc(sizeof(char) * BUFSIZE);
+	if (buffer == 0)
 		return (-1);
-	while (store != '\n')
+	while (t != '\n')
 	{
-		i = read(STDIN_FILENO, &store, 1);
+		i = read(STDIN_FILENO, &t, 1);
 		if (i == -1 || (i == 0 && input == 0))
 		{
-			free(buf);
+			free(buffer);
 			return (-1);
 		}
 		if (i == 0 && input != 0)
@@ -67,13 +70,13 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 			input++;
 			break;
 		}
-		if (input >= BUFFER)
-			buf = _realloc(buf, input, input + 1);
-		buf[input] = store;
+		if (input >= BUFSIZE)
+			buffer = _realloc(buffer, input, input + 1);
+		buffer[input] = t;
 		input++;
 	}
-	buf[input] = '\0';
-	put_line(lineptr, n, buf, input);
+	buffer[input] = '\0';
+	bring_line(lineptr, n, buffer, input);
 	retval = input;
 	if (i != 0)
 		input = 0;
